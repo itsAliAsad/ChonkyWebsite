@@ -24,21 +24,27 @@ export default function Navbar() {
   }
 
   return (
-    <header className="w-full sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b-2 border-border">
-      <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-        <Link href="#home" className="flex items-center gap-2 font-heading text-2xl uppercase tracking-tight hover:scale-105 transition-transform" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}>
-          <div className="size-10 grid place-items-center rounded-full border-2 border-border bg-main text-main-foreground shadow-sm">
-            <Cookie className="size-6" />
+    <header className="w-full sticky top-4 z-50 px-4 md:px-8">
+      <div className="glass-panel rounded-full mx-auto max-w-7xl h-20 md:h-24 flex items-center justify-between px-6 md:px-10 shadow-shadow transition-all hover:shadow-shadow-hover">
+        <Link
+          href="#home"
+          className="flex items-center gap-3 group"
+          onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}
+        >
+          <div className="size-12 md:size-14 grid place-items-center rounded-full border-2 border-border bg-main text-main-foreground shadow-sm group-hover:rotate-12 transition-transform duration-300">
+            <Cookie className="size-7 md:size-8" />
           </div>
-          Chonky
+          <span className="font-heading text-3xl md:text-4xl uppercase hidden sm:block group-hover:text-main-foreground transition-colors">
+            Chonky
+          </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-10">
           {navItems.map((item) => (
-            <a 
-              key={item.label} 
-              href={item.href} 
-              className="font-heading text-lg hover:text-main-foreground/80 hover:underline decoration-2 underline-offset-4 transition-all"
+            <a
+              key={item.label}
+              href={item.href}
+              className="font-heading text-xl hover:text-main-foreground hover:-translate-y-1 transition-all duration-300 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-current after:transition-all hover:after:w-full"
               onClick={(e) => { e.preventDefault(); scrollToSection(item.href); }}
             >
               {item.label}
@@ -47,40 +53,43 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center gap-4">
-          <Button 
-            className="hidden md:flex rounded-full px-6 font-bold border-2 shadow-sm hover:shadow-none"
+          <Button
+            className="hidden md:flex rounded-full px-8 h-12 text-lg font-bold border-2 border-border bg-foreground text-background hover:bg-main hover:text-main-foreground shadow-sm hover:shadow-none transition-all hover:-translate-y-0.5"
             onClick={() => scrollToSection('customize')}
           >
             <ShoppingBag className="mr-2 h-5 w-5" /> Your Box
           </Button>
 
-          <Button 
-            variant="neutral" 
-            size="icon" 
-            className="md:hidden rounded-full border-2"
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden rounded-full border-2 border-border size-12 hover:bg-main hover:text-main-foreground transition-colors"
             onClick={() => setMobileOpen((o) => !o)}
           >
-            {mobileOpen ? <X /> : <Menu />}
+            {mobileOpen ? <X className="size-6" /> : <Menu className="size-6" />}
           </Button>
         </div>
       </div>
 
       {/* Mobile Menu Overlay */}
       {mobileOpen && (
-        <div className="fixed inset-0 top-20 z-40 bg-background border-t-2 border-border flex flex-col p-6 animate-in slide-in-from-top-5 duration-200">
-          <nav className="flex flex-col gap-4">
+        <div className="fixed inset-x-4 top-28 bottom-4 z-40 glass-panel rounded-3xl flex flex-col p-8 animate-in slide-in-from-bottom-10 fade-in duration-300 shadow-shadow">
+          <nav className="flex flex-col gap-6 h-full justify-center items-center">
             {navItems.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
-                className="text-4xl font-heading uppercase py-4 border-b-2 border-border/20 hover:text-main transition-colors"
+                className="text-5xl md:text-6xl font-heading uppercase hover:text-main hover:scale-110 transition-all duration-300"
                 onClick={(e) => { e.preventDefault(); scrollToSection(item.href); }}
               >
                 {item.label}
               </a>
             ))}
-            <Button className="w-full mt-8 h-14 text-xl rounded-full border-2 shadow-shadow" onClick={() => scrollToSection('customize')}>
-              <ShoppingBag className="mr-2" /> View Your Box
+            <Button
+              className="w-full max-w-xs mt-12 h-16 text-2xl rounded-full border-2 border-border bg-main text-main-foreground shadow-shadow hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+              onClick={() => scrollToSection('customize')}
+            >
+              <ShoppingBag className="mr-3 size-6" /> View Box
             </Button>
           </nav>
         </div>

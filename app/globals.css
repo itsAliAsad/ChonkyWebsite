@@ -4,59 +4,57 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Brand Palette */
-  --color-cream: #FFF8E7;
-  --color-brown: #5C4026;
-  --color-pink: #F2C4B9;
-  --color-yellow: #F4B960;
-  --color-teal: #7CA096;
-  --color-muted: #8C6A65;
+  /* Brand Palette - Premium Neobrutalism */
+  /* Richer, deeper tones for a more 'expensive' feel */
+  --color-cream: #F9F4EF;
+  /* Slightly warmer, less yellow */
+  --color-brown: #4A332A;
+  /* Deeper, more chocolate */
+  --color-pink: #E8B4B8;
+  /* Dustier pink */
+  --color-yellow: #E6A65D;
+  /* Gold-leaning yellow */
+  --color-teal: #6B8E86;
+  /* Muted teal */
+  --color-muted: #9C847F;
+  --color-black: #1A1A1A;
+  --color-white: #FFFFFF;
 
   /* Semantic Tokens */
   --background: var(--color-cream);
   --secondary-background: var(--color-pink);
-  
+
   --foreground: var(--color-brown);
   --muted-foreground: var(--color-muted);
-  
+
   --main: var(--color-yellow);
   --main-foreground: var(--color-brown);
-  
+
   --border: var(--color-brown);
   --ring: var(--color-brown);
-  --overlay: rgba(92, 64, 38, 0.8); /* Brown overlay */
-  
-  --shadow: 4px 4px 0px 0px var(--border);
-  
-  /* Charts (kept as is or adjusted if needed, but sticking to defaults for now) */
-  --chart-1: #FFBF00;
-  --chart-2: #0099FF;
-  --chart-3: #FF7A05;
-  --chart-4: #00D696;
-  --chart-5: #7A83FF;
-  --chart-active-dot: #000;
+  --overlay: rgba(74, 51, 42, 0.8);
+
+  /* Hard shadows for neobrutalist feel */
+  --shadow: 6px 6px 0px 0px var(--border);
+  --shadow-hover: 8px 8px 0px 0px var(--border);
+  --shadow-active: 2px 2px 0px 0px var(--border);
 }
 
 .dark {
-  /* Dark mode mapping - Inverting for accessibility but keeping brand feel */
-  --background: #2A1D15; /* Very dark brown */
-  --secondary-background: #3D2B20;
-  --foreground: #FFF8E7; /* Cream text */
-  --main-foreground: #2A1D15;
-  --main: #F4B960; /* Keep yellow */
-  --border: #FFF8E7; /* Cream border */
-  --ring: #FFF8E7;
-  
-  --muted-foreground: #D4B5B0;
-  
-  --shadow: 4px 4px 0px 0px var(--border);
-  
-  --chart-1: #E5AC00;
-  --chart-2: #008AE5;
-  --chart-3: #EB6D00;
-  --chart-4: #00BD84;
-  --chart-5: #7A83FF;
-  --chart-active-dot: #fff;
+  /* Dark mode - Luxury Dark */
+  --background: #221814;
+  --secondary-background: #362620;
+  --foreground: #F9F4EF;
+  --main-foreground: #221814;
+  --main: #E6A65D;
+  --border: #F9F4EF;
+  --ring: #F9F4EF;
+
+  --muted-foreground: #C4A6A0;
+
+  --shadow: 6px 6px 0px 0px var(--border);
+  --shadow-hover: 8px 8px 0px 0px var(--border);
+  --shadow-active: 2px 2px 0px 0px var(--border);
 }
 
 @theme inline {
@@ -69,53 +67,124 @@
   --color-border: var(--border);
   --color-overlay: var(--overlay);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
 
-  --spacing-boxShadowX: 4px;
-  --spacing-boxShadowY: 4px;
-  --spacing-reverseBoxShadowX: -4px;
-  --spacing-reverseBoxShadowY: -4px;
-  --radius-base: 15px;
+  --spacing-boxShadowX: 6px;
+  --spacing-boxShadowY: 6px;
+  --spacing-reverseBoxShadowX: -6px;
+  --spacing-reverseBoxShadowY: -6px;
+
+  --radius-base: 0px;
+  /* Sharp edges for neobrutalism */
+  --radius-lg: 8px;
+  --radius-md: 4px;
+  --radius-sm: 2px;
+
   --shadow-shadow: var(--shadow);
-  
+  --shadow-hover: var(--shadow-hover);
+  --shadow-active: var(--shadow-active);
+
   --font-base: "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-heading: "Bagel Fat One", ui-sans-serif, system-ui, sans-serif;
 
   --animate-marquee: marquee var(--duration) linear infinite;
   --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
 
   @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(calc(-100% - var(--gap))); }
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
   }
 
   @keyframes marquee-vertical {
-    from { transform: translateY(0); }
-    to { transform: translateY(calc(-100% - var(--gap))); }
-  }
-}
-  
-@layer base {
-  body {
-    @apply text-foreground font-base bg-background;
+    from {
+      transform: translateY(0);
+    }
+
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
   }
 
-  h1, h2, h3, h4, h5, h6{
-    @apply font-heading;
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+}
+
+@layer base {
+  body {
+    @apply text-foreground font-base bg-background selection:bg-main selection:text-main-foreground;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading uppercase;
+  }
+
+  h1 {
+    @apply text-5xl md:text-7xl lg:text-8xl leading-[0.9];
+  }
+
+  h2 {
+    @apply text-4xl md:text-6xl leading-[0.95];
+  }
+
+  h3 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  p {
+    @apply leading-relaxed text-lg md:text-xl;
   }
 
   /* Bind utility tokens to Next Font variables */
   body {
     font-family: var(--font-base);
-    font-weight: 900;
+    font-weight: 500;
+    /* Slightly bolder base */
   }
-  
-  h1, h2, h3, h4, h5, h6, .font-heading {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-heading {
     font-family: var(--font-heading);
     font-weight: 400;
+  }
+}
+
+@layer utilities {
+  .text-stroke {
+    -webkit-text-stroke: 2px var(--border);
+    color: transparent;
+  }
+
+  .text-stroke-sm {
+    -webkit-text-stroke: 1px var(--border);
+    color: transparent;
+  }
+
+  .glass-panel {
+    @apply bg-background/80 backdrop-blur-md border-2 border-border;
   }
 }

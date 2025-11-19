@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { useBoxBuilder } from "@/components/box/BoxContext"
-import { Plus } from "lucide-react"
+import { Plus, Star } from "lucide-react"
 
 type Flavor = {
   id: string
@@ -38,54 +38,61 @@ export default function Flavors() {
   const { addFlavorToBox } = useBoxBuilder()
 
   return (
-    <section id="flavors-section" className="w-full py-20 bg-background">
+    <section id="flavors-section" className="w-full py-32 bg-background relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-secondary-background/30 -skew-x-12 -z-10" />
+
       <div className="container mx-auto px-4">
-        <div className="mb-12 text-center space-y-4">
-          <h2 className="text-5xl md:text-7xl font-heading uppercase">The Lineup</h2>
-          <p className="text-xl font-medium max-w-2xl mx-auto">
-            Freshly baked, gooey on the inside, crispy on the outside. Pick your poison.
+        <div className="mb-24 text-center space-y-6">
+          <div className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-bold uppercase tracking-wider bg-white/50 backdrop-blur-sm">
+            <Star className="size-4 fill-main text-main" />
+            Freshly Baked
+          </div>
+          <h2 className="text-6xl md:text-8xl font-heading uppercase tracking-tight">The Lineup</h2>
+          <p className="text-xl md:text-2xl font-medium max-w-2xl mx-auto text-muted-foreground">
+            Gooey on the inside, crispy on the outside. Pick your poison.
           </p>
         </div>
 
-        <div className="space-y-20">
+        <div className="space-y-32">
           {Object.entries(collections).map(([key, collection]) => (
-            <div key={key} className="space-y-8">
-              <div className="flex items-center gap-4">
-                <h3 className="text-3xl md:text-4xl font-heading bg-main px-4 py-2 border-2 border-border shadow-shadow rotate-1 inline-block">
+            <div key={key} className="space-y-12">
+              <div className="flex items-center gap-6">
+                <h3 className="text-4xl md:text-5xl font-heading uppercase text-stroke-sm md:text-stroke text-transparent relative z-10">
                   {collection.label}
+                  <span className="absolute -bottom-2 left-0 w-full h-4 bg-main/40 -z-10 -rotate-1" />
                 </h3>
-                <div className="h-1 flex-1 bg-border rounded-full opacity-20"></div>
+                <div className="h-px flex-1 bg-border/20"></div>
               </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
                 {collection.items.map((p) => (
-                  <div key={p.id} className="group relative bg-white border-2 border-border rounded-base shadow-shadow hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all duration-200 flex flex-col overflow-hidden">
-                    <div className="relative aspect-square bg-secondary-background border-b-2 border-border p-8 group-hover:bg-main/20 transition-colors">
-                      <Image 
-                        src={p.image} 
-                        alt={p.name} 
-                        fill 
-                        className="object-contain p-4 drop-shadow-md group-hover:scale-110 transition-transform duration-300" 
+                  <div key={p.id} className="group relative flex flex-col h-full">
+                    <div className="relative aspect-square mb-6 rounded-[2rem] bg-secondary-background/50 border-2 border-transparent group-hover:border-border transition-all duration-300 overflow-visible">
+                      <div className="absolute inset-0 bg-main/0 group-hover:bg-main/10 rounded-[2rem] transition-colors duration-300" />
+                      <Image
+                        src={p.image}
+                        alt={p.name}
+                        fill
+                        className="object-contain p-8 drop-shadow-xl group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 ease-out"
                       />
-                      <div className="absolute top-4 right-4 bg-white border-2 border-border px-3 py-1 font-bold rounded-full text-sm shadow-sm">
+                      <div className="absolute -top-4 -right-4 bg-white border-2 border-border px-4 py-2 font-heading text-lg rounded-full shadow-shadow group-hover:shadow-shadow-hover group-hover:-translate-y-1 transition-all">
                         {p.price}
                       </div>
                     </div>
-                    
-                    <div className="p-6 flex flex-col flex-1 gap-4">
-                      <div>
-                        <h4 className="text-2xl font-heading mb-2">{p.name}</h4>
-                        <p className="text-muted-foreground font-medium leading-relaxed">{p.description}</p>
+
+                    <div className="space-y-4 px-2 flex-1 flex flex-col">
+                      <div className="flex-1">
+                        <h4 className="text-3xl font-heading uppercase mb-2 group-hover:text-main transition-colors">{p.name}</h4>
+                        <p className="text-lg text-muted-foreground font-medium leading-relaxed">{p.description}</p>
                       </div>
-                      
-                      <div className="mt-auto pt-4">
-                        <Button 
-                          className="w-full text-lg font-bold border-2 shadow-sm hover:shadow-none" 
-                          onClick={() => addFlavorToBox(p.name, 1)}
-                        >
-                          <Plus className="mr-2 h-5 w-5" /> Add to Box
-                        </Button>
-                      </div>
+
+                      <Button
+                        className="w-full h-14 text-lg font-bold rounded-xl border-2 border-border bg-background text-foreground shadow-sm hover:bg-main hover:text-main-foreground hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+                        onClick={() => addFlavorToBox(p.name, 1)}
+                      >
+                        <Plus className="mr-2 h-5 w-5" /> Add to Box
+                      </Button>
                     </div>
                   </div>
                 ))}

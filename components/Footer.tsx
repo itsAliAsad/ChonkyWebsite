@@ -1,55 +1,64 @@
 import Link from "next/link"
+import { ArrowUpRight } from "lucide-react"
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t-2 border-border bg-main text-main-foreground">
-      <div className="container mx-auto px-4 py-20">
-        <div className="grid gap-12 md:grid-cols-4">
-          <div className="md:col-span-2 space-y-6">
-            <h3 className="font-heading text-4xl uppercase">Stay Sweet</h3>
-            <p className="text-xl font-medium max-w-md">
+    <footer className="w-full bg-foreground text-background overflow-hidden">
+      <div className="container mx-auto px-4 pt-24 pb-12">
+        <div className="grid gap-16 lg:grid-cols-12 mb-24">
+          <div className="lg:col-span-6 space-y-8">
+            <h3 className="font-heading text-6xl md:text-8xl uppercase leading-[0.8]">
+              Stay<br />Sweet
+            </h3>
+            <p className="text-2xl font-medium max-w-md text-background/80">
               Join our mailing list for exclusive drops, secret flavors, and free cookie alerts.
             </p>
-            <div className="flex gap-2 max-w-md">
-              <input 
-                type="email" 
-                placeholder="your@email.com" 
-                className="flex-1 rounded-base border-2 border-border p-3 font-bold placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-black"
+            <div className="flex flex-col sm:flex-row gap-4 max-w-lg">
+              <input
+                type="email"
+                placeholder="your@email.com"
+                className="flex-1 bg-transparent border-b-2 border-background/30 p-4 text-xl placeholder:text-background/30 focus:outline-none focus:border-main transition-colors"
               />
-              <button className="rounded-base border-2 border-border bg-white px-6 py-3 font-bold shadow-shadow hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
-                Join
+              <button className="group flex items-center gap-2 text-xl font-bold uppercase tracking-wide hover:text-main transition-colors">
+                Join the Club <ArrowUpRight className="group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
           </div>
-          
-          <div className="space-y-4">
-            <h4 className="font-heading text-2xl uppercase">Menu</h4>
-            <nav className="flex flex-col gap-2 text-lg font-bold">
-              <Link href="#home" className="hover:underline decoration-2 underline-offset-4">Home</Link>
-              <Link href="#flavors-section" className="hover:underline decoration-2 underline-offset-4">Flavors</Link>
-              <Link href="#customize" className="hover:underline decoration-2 underline-offset-4">Build Box</Link>
+
+          <div className="lg:col-span-3 space-y-8">
+            <h4 className="font-heading text-3xl uppercase text-main">Menu</h4>
+            <nav className="flex flex-col gap-4 text-xl font-medium">
+              <Link href="#home" className="hover:text-main transition-colors w-fit">Home</Link>
+              <Link href="#flavors-section" className="hover:text-main transition-colors w-fit">The Lineup</Link>
+              <Link href="#customize" className="hover:text-main transition-colors w-fit">Build Box</Link>
+              <Link href="#" className="hover:text-main transition-colors w-fit">Merch</Link>
+              <Link href="#" className="hover:text-main transition-colors w-fit">Locations</Link>
             </nav>
           </div>
-          
-          <div className="space-y-4">
-            <h4 className="font-heading text-2xl uppercase">Socials</h4>
-            <nav className="flex flex-col gap-2 text-lg font-bold">
-              <a href="#" className="hover:underline decoration-2 underline-offset-4">Instagram</a>
-              <a href="#" className="hover:underline decoration-2 underline-offset-4">TikTok</a>
-              <a href="#" className="hover:underline decoration-2 underline-offset-4">Twitter</a>
+
+          <div className="lg:col-span-3 space-y-8">
+            <h4 className="font-heading text-3xl uppercase text-main">Socials</h4>
+            <nav className="flex flex-col gap-4 text-xl font-medium">
+              <a href="#" className="hover:text-main transition-colors w-fit">Instagram</a>
+              <a href="#" className="hover:text-main transition-colors w-fit">TikTok</a>
+              <a href="#" className="hover:text-main transition-colors w-fit">Twitter</a>
+              <a href="#" className="hover:text-main transition-colors w-fit">YouTube</a>
             </nav>
           </div>
         </div>
-        
-        <div className="mt-20 pt-8 border-t-2 border-border/20 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-bold">© {new Date().getFullYear()} Chonky Cookies. All rights reserved.</p>
-          <p className="font-bold">Designed for the sweet tooth.</p>
+
+        <div className="pt-8 border-t border-background/20 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-background/60">
+          <p className="font-medium">© {new Date().getFullYear()} Chonky Cookies. All rights reserved.</p>
+          <div className="flex gap-6 font-medium">
+            <Link href="#" className="hover:text-background transition-colors">Privacy Policy</Link>
+            <Link href="#" className="hover:text-background transition-colors">Terms of Service</Link>
+          </div>
         </div>
       </div>
-      
+
       {/* Massive Footer Logo */}
-      <div className="w-full overflow-hidden border-t-2 border-border bg-white">
-        <h1 className="text-[15vw] leading-none font-heading text-center tracking-tighter text-main select-none">
+      <div className="w-full border-t-2 border-background/10 bg-main">
+        <h1 className="text-[22vw] leading-[0.8] font-heading text-center tracking-tighter text-foreground select-none mix-blend-multiply opacity-90">
           CHONKY
         </h1>
       </div>

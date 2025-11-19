@@ -18,12 +18,12 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=DM+Sans:opsz,wght@9..40,900&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,900&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased">
         {children}
-        <Toaster 
-          position="bottom-right" 
+        <Toaster
+          position="bottom-right"
           theme="light"
           toastOptions={{
             unstyled: true,
@@ -33,7 +33,7 @@ export default function RootLayout({
               description: '!text-foreground text-sm font-bold',
               actionButton: 'bg-main text-main-foreground text-sm font-bold border-2 border-border shadow-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all px-3 py-1.5 rounded-base shrink-0',
             }
-          }} 
+          }}
         />
       </body>
     </html>
