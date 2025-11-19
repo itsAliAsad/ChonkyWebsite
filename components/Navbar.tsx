@@ -2,80 +2,85 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { Menu, X, ShoppingCart, Cookie } from "lucide-react"
+import { Menu, X, ShoppingBag, Cookie } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu"
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
   const navItems = [
     { label: "Home", href: "#home" },
-    { label: "Shop", href: "#products" },
-    { label: "About", href: "#about" },
-    { label: "Contact", href: "#contact" },
+    { label: "The Lineup", href: "#flavors-section" },
+    { label: "Build Box", href: "#customize" },
   ]
 
+  const scrollToSection = (id: string) => {
+    setMobileOpen(false)
+    const element = document.getElementById(id.replace('#', ''))
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
   return (
-    <header className="w-full sticky top-0 z-50 bg-background/80 backdrop-blur border-b-2 border-border">
-      <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-        <Link href="#home" className="flex items-center gap-2 font-heading text-lg">
-          <div className="size-8 grid place-items-center rounded-base border-2 border-border bg-main text-main-foreground shadow-shadow">
-            <Cookie className="size-4" />
+    <header className="w-full sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b-2 border-border">
+      <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+        <Link href="#home" className="flex items-center gap-2 font-heading text-2xl uppercase tracking-tight hover:scale-105 transition-transform" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}>
+          <div className="size-10 grid place-items-center rounded-full border-2 border-border bg-main text-main-foreground shadow-sm">
+            <Cookie className="size-6" />
           </div>
-          Chonky Cookies
+          Chonky
         </Link>
 
-        <div className="hidden md:flex flex-1 justify-center">
-          <NavigationMenu className="bg-secondary-background border-border border-2">
-            <NavigationMenuList>
-              {navItems.map((item) => (
-                <NavigationMenuItem key={item.label}>
-                  <Link href={item.href}>
-                    <NavigationMenuLink className="font-heading">
-                      {item.label}
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
+        <nav className="hidden md:flex items-center gap-8">
+          {navItems.map((item) => (
+            <a 
+              key={item.label} 
+              href={item.href} 
+              className="font-heading text-lg hover:text-main-foreground/80 hover:underline decoration-2 underline-offset-4 transition-all"
+              onClick={(e) => { e.preventDefault(); scrollToSection(item.href); }}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
 
-        <div className="hidden md:flex items-center gap-2">
-          <Button variant="neutral" size="sm">
-            <ShoppingCart className="mr-2" /> Cart
+        <div className="flex items-center gap-4">
+          <Button 
+            className="hidden md:flex rounded-full px-6 font-bold border-2 shadow-sm hover:shadow-none"
+            onClick={() => scrollToSection('customize')}
+          >
+            <ShoppingBag className="mr-2 h-5 w-5" /> Your Box
           </Button>
-        </div>
 
-        <div className="md:hidden">
-          <Button aria-label="Toggle menu" variant="neutral" size="icon" onClick={() => setMobileOpen((o) => !o)}>
+          <Button 
+            variant="neutral" 
+            size="icon" 
+            className="md:hidden rounded-full border-2"
+            onClick={() => setMobileOpen((o) => !o)}
+          >
             {mobileOpen ? <X /> : <Menu />}
           </Button>
         </div>
       </div>
 
+      {/* Mobile Menu Overlay */}
       {mobileOpen && (
-        <div className="md:hidden border-t-2 border-border bg-background">
-          <nav className="mx-auto max-w-6xl px-4 py-3 flex flex-col gap-2">
+        <div className="fixed inset-0 top-20 z-40 bg-background border-t-2 border-border flex flex-col p-6 animate-in slide-in-from-top-5 duration-200">
+          <nav className="flex flex-col gap-4">
             {navItems.map((item) => (
-              <Link
+              <a
                 key={item.label}
                 href={item.href}
-                className="py-2 px-3 rounded-base border-2 border-border bg-secondary-background shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none"
-                onClick={() => setMobileOpen(false)}
+                className="text-4xl font-heading uppercase py-4 border-b-2 border-border/20 hover:text-main transition-colors"
+                onClick={(e) => { e.preventDefault(); scrollToSection(item.href); }}
               >
                 {item.label}
-              </Link>
+              </a>
             ))}
-            <Button className="w-full" variant="neutral">
-              <ShoppingCart className="mr-2" /> Cart
+            <Button className="w-full mt-8 h-14 text-xl rounded-full border-2 shadow-shadow" onClick={() => scrollToSection('customize')}>
+              <ShoppingBag className="mr-2" /> View Your Box
             </Button>
           </nav>
         </div>

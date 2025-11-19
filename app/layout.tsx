@@ -1,20 +1,7 @@
 import type { Metadata } from "next";
 import Background from "@/components/Background";
-import { DM_Sans, Bagel_Fat_One } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
-  weight: ["900"],
-});
-
-const bagel = Bagel_Fat_One({
-  variable: "--font-bagel-fat-one",
-  subsets: ["latin"],
-  weight: "400",
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -28,20 +15,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${dmSans.variable} ${bagel.variable} antialiased`}>
-        <div className="fixed inset-0 -z-10">
-          <Background
-            speed={0.05}
-            direction="diagonal"
-            borderColor="#624722"
-            hoverFillColor="#444"
-            squareSize={120}
-            lineWidth={5}
-            backgroundColor="#f5c5be"
-          />
-        </div>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=DM+Sans:opsz,wght@9..40,900&display=swap" rel="stylesheet" />
+      </head>
+      <body className="antialiased">
         {children}
-        <Toaster position="bottom-right" />
+        <Toaster position="bottom-right" toastOptions={{
+          className: 'bg-white border-2 border-border text-foreground font-base shadow-shadow',
+          descriptionClassName: 'text-muted-foreground font-medium',
+          classNames: {
+            actionButton: 'bg-main text-main-foreground font-bold border-2 border-border shadow-sm hover:shadow-none',
+          }
+        }} />
       </body>
     </html>
   );

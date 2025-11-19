@@ -4,34 +4,25 @@ import Flavors from "@/components/Flavors"
 import CustomizeBox from "@/components/CustomizeBox"
 import Footer from "@/components/Footer"
 import { BoxProvider } from "@/components/box/BoxContext"
+import Marquee from "@/components/ui/marquee"
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background text-foreground font-base">
       <Navbar />
-      <main className="flex-1 snap-y snap-mandatory overflow-y-auto">
-        <section id="home" className="snap-start py-10">
-          <div className="mx-auto max-w-6xl px-4">
-            <div className="rounded-base border-2 border-border bg-white shadow-shadow p-8">
-              <Hero />
-            </div>
-          </div>
-        </section>
+      <main className="flex-1">
+        <Hero />
+        
+        <div className="border-y-2 border-border bg-main py-4 overflow-hidden">
+           <Marquee className="[--duration:20s] font-heading text-4xl">
+             <span>THICC • FATT • CHONKY • GOOEY • INDULGENT • SWEET • </span>
+             <span>THICC • FATT • CHONKY • GOOEY • INDULGENT • SWEET • </span>
+           </Marquee>
+        </div>
+
         <BoxProvider>
-          <section id="flavors-section" className="snap-start py-10">
-            <div className="mx-auto max-w-6xl px-4">
-              <div className="rounded-base border-2 border-border bg-white shadow-shadow p-8">
-                <Flavors />
-              </div>
-            </div>
-          </section>
-          <section id="customize" className="snap-start py-10">
-            <div className="mx-auto max-w-6xl px-4">
-              <div className="rounded-base border-2 border-border bg-white shadow-shadow p-8">
-                <CustomizeBox />
-              </div>
-            </div>
-          </section>
+          <Flavors />
+          <CustomizeBox />
         </BoxProvider>
       </main>
       <Footer />
