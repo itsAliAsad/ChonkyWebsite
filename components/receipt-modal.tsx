@@ -2,6 +2,8 @@
 
 import * as React from "react"
 import { Button } from "@/components/ui/button"
+import { getCheckoutUrl } from "@/lib/shopify"
+import { toast } from "sonner"
 import {
   Table,
   TableBody,
@@ -28,8 +30,29 @@ type ReceiptModalProps = {
 }
 
 export default function ReceiptModal({ open, onClose, items, subtotal, shipping, total }: ReceiptModalProps) {
+  const [loading, setLoading] = React.useState(false)
+
   if (!open) return null
   const format = (n: number) => `$${n.toFixed(2)}`
+
+  const handleCheckout = async () => {
+    setLoading(true)
+    try {
+      const cartItems = items.map(i => ({ name: i.name, quantity: i.quantity }))
+      const url = await getCheckoutUrl(cartItems)
+      if (url) {
+        window.location.href = url
+      } else {
+        toast.error("Could not create checkout.")
+      }
+    } catch (e) {
+      console.error(e)
+      toast.error("Error connecting to store.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center">
       <div className="absolute inset-0 bg-overlay" onClick={onClose} />
@@ -79,7 +102,9 @@ export default function ReceiptModal({ open, onClose, items, subtotal, shipping,
 
         <div className="flex justify-end gap-3 pt-2">
           <Button variant="neutral" onClick={onClose}>Continue shopping</Button>
-          <Button>Proceed to checkout</Button>
+          <Button onClick={handleCheckout} disabled={loading}>
+            {loading ? "Processing..." : "Proceed to checkout"}
+          </Button>
         </div>
       </div>
     </div>

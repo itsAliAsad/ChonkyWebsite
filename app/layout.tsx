@@ -22,13 +22,19 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         {children}
-        <Toaster position="bottom-right" toastOptions={{
-          className: 'bg-white border-2 border-border text-foreground font-base shadow-shadow',
-          descriptionClassName: 'text-muted-foreground font-medium',
-          classNames: {
-            actionButton: 'bg-main text-main-foreground font-bold border-2 border-border shadow-sm hover:shadow-none',
-          }
-        }} />
+        <Toaster 
+          position="bottom-right" 
+          theme="light"
+          toastOptions={{
+            unstyled: true,
+            classNames: {
+              toast: 'bg-background border-2 border-border text-foreground font-base shadow-shadow p-4 flex gap-3 items-center w-full md:w-[356px] rounded-base',
+              title: 'font-heading text-lg leading-tight',
+              description: '!text-foreground text-sm font-bold',
+              actionButton: 'bg-main text-main-foreground text-sm font-bold border-2 border-border shadow-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all px-3 py-1.5 rounded-base shrink-0',
+            }
+          }} 
+        />
       </body>
     </html>
   );

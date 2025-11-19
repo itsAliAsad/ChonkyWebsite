@@ -4,33 +4,53 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #f5c5be;
-  --secondary-background: #f7ede1;
-  --foreground: #624722;
-  --main-foreground: oklch(0% 0 0);
-  --main: oklch(84.08% 0.1725 84.2);
-  --border: oklch(0% 0 0);
-  --ring: oklch(0% 0 0);
-  --overlay: oklch(0% 0 0 / 0.8);
+  /* Brand Palette */
+  --color-cream: #FFF8E7;
+  --color-brown: #5C4026;
+  --color-pink: #F2C4B9;
+  --color-yellow: #F4B960;
+  --color-teal: #7CA096;
+  --color-muted: #8C6A65;
+
+  /* Semantic Tokens */
+  --background: var(--color-cream);
+  --secondary-background: var(--color-pink);
+  
+  --foreground: var(--color-brown);
+  --muted-foreground: var(--color-muted);
+  
+  --main: var(--color-yellow);
+  --main-foreground: var(--color-brown);
+  
+  --border: var(--color-brown);
+  --ring: var(--color-brown);
+  --overlay: rgba(92, 64, 38, 0.8); /* Brown overlay */
+  
   --shadow: 4px 4px 0px 0px var(--border);
+  
+  /* Charts (kept as is or adjusted if needed, but sticking to defaults for now) */
   --chart-1: #FFBF00;
   --chart-2: #0099FF;
   --chart-3: #FF7A05;
   --chart-4: #00D696;
   --chart-5: #7A83FF;
   --chart-active-dot: #000;
-  --muted-foreground: #414141;
 }
 
 .dark {
-  --background: oklch(28.91% 0.0359 90.09);
-  --secondary-background: oklch(23.93% 0 0);
-  --foreground: oklch(92.49% 0 0);
-  --main-foreground: oklch(0% 0 0);
-  --main: oklch(77.7% 0.1593880864006951 84.38427202675717);
-  --border: oklch(0% 0 0);
-  --ring: oklch(100% 0 0);
+  /* Dark mode mapping - Inverting for accessibility but keeping brand feel */
+  --background: #2A1D15; /* Very dark brown */
+  --secondary-background: #3D2B20;
+  --foreground: #FFF8E7; /* Cream text */
+  --main-foreground: #2A1D15;
+  --main: #F4B960; /* Keep yellow */
+  --border: #FFF8E7; /* Cream border */
+  --ring: #FFF8E7;
+  
+  --muted-foreground: #D4B5B0;
+  
   --shadow: 4px 4px 0px 0px var(--border);
+  
   --chart-1: #E5AC00;
   --chart-2: #008AE5;
   --chart-3: #EB6D00;
