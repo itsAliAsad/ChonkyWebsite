@@ -10,7 +10,7 @@ export async function fetchProducts() {
   return await client.product.fetchAll();
 }
 
-export async function getCheckoutUrl(cartItems: { name: string; quantity: number }[]) {
+export async function getCheckoutUrl(cartItems: { name: string; quantity: number }[], note?: string) {
   try {
     const products = await fetchProducts();
     const lineItems = [];
@@ -32,7 +32,7 @@ export async function getCheckoutUrl(cartItems: { name: string; quantity: number
 
     if (lineItems.length === 0) return null;
 
-    const checkout = await client.checkout.create();
+    const checkout = await client.checkout.create(note ? { customAttributes: [{ key: "Lid note", value: note }] } : undefined);
     const checkoutId = checkout.id;
     const updatedCheckout = await client.checkout.addLineItems(checkoutId, lineItems);
     

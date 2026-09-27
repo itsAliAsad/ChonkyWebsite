@@ -1,190 +1,204 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Brand Palette - Premium Neobrutalism */
-  /* Richer, deeper tones for a more 'expensive' feel */
-  --color-cream: #F9F4EF;
-  /* Slightly warmer, less yellow */
-  --color-brown: #4A332A;
-  /* Deeper, more chocolate */
-  --color-pink: #E8B4B8;
-  /* Dustier pink */
-  --color-yellow: #E6A65D;
-  /* Gold-leaning yellow */
-  --color-teal: #6B8E86;
-  /* Muted teal */
-  --color-muted: #9C847F;
-  --color-black: #1A1A1A;
-  --color-white: #FFFFFF;
+  /* Chonky palette: strawberry milk, cocoa, butter, kraft board, receipt paper, cherry. */
+  --pink: #f4c9d0;
+  --pink-deep: #e9a7b4;
+  --cocoa: #3a1f16;
+  --cocoa-soft: #6b4336;
+  --butter: #ffe39a;
+  --kraft: #c9925b;
+  --kraft-dark: #94622f;
+  --paper: #fff8ef;
+  --cherry: #d4412c;
 
-  /* Semantic Tokens */
-  --background: var(--color-cream);
-  --secondary-background: var(--color-pink);
-
-  --foreground: var(--color-brown);
-  --muted-foreground: var(--color-muted);
-
-  --main: var(--color-yellow);
-  --main-foreground: var(--color-brown);
-
-  --border: var(--color-brown);
-  --ring: var(--color-brown);
-  --overlay: rgba(74, 51, 42, 0.8);
-
-  /* Hard shadows for neobrutalist feel */
-  --shadow: 6px 6px 0px 0px var(--border);
-  --shadow-hover: 8px 8px 0px 0px var(--border);
-  --shadow-active: 2px 2px 0px 0px var(--border);
-}
-
-.dark {
-  /* Dark mode - Luxury Dark */
-  --background: #221814;
-  --secondary-background: #362620;
-  --foreground: #F9F4EF;
-  --main-foreground: #221814;
-  --main: #E6A65D;
-  --border: #F9F4EF;
-  --ring: #F9F4EF;
-
-  --muted-foreground: #C4A6A0;
-
-  --shadow: 6px 6px 0px 0px var(--border);
-  --shadow-hover: 8px 8px 0px 0px var(--border);
-  --shadow-active: 2px 2px 0px 0px var(--border);
+  --ease-squish: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @theme inline {
-  --color-main: var(--main);
-  --color-background: var(--background);
-  --color-secondary-background: var(--secondary-background);
-  --color-foreground: var(--foreground);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-main-foreground: var(--main-foreground);
-  --color-border: var(--border);
-  --color-overlay: var(--overlay);
-  --color-ring: var(--ring);
+  --color-pink: var(--pink);
+  --color-pink-deep: var(--pink-deep);
+  --color-cocoa: var(--cocoa);
+  --color-cocoa-soft: var(--cocoa-soft);
+  --color-butter: var(--butter);
+  --color-kraft: var(--kraft);
+  --color-kraft-dark: var(--kraft-dark);
+  --color-paper: var(--paper);
+  --color-cherry: var(--cherry);
 
-  --spacing-boxShadowX: 6px;
-  --spacing-boxShadowY: 6px;
-  --spacing-reverseBoxShadowX: -6px;
-  --spacing-reverseBoxShadowY: -6px;
+  --font-display: var(--nf-display), ui-rounded, system-ui, sans-serif;
+  --font-sans: var(--nf-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--nf-mono), ui-monospace, monospace;
+  --font-hand: var(--nf-hand), cursive;
 
-  --radius-base: 0px;
-  /* Sharp edges for neobrutalism */
-  --radius-lg: 8px;
-  --radius-md: 4px;
-  --radius-sm: 2px;
-
-  --shadow-shadow: var(--shadow);
-  --shadow-hover: var(--shadow-hover);
-  --shadow-active: var(--shadow-active);
-
-  --font-base: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: "Bagel Fat One", ui-sans-serif, system-ui, sans-serif;
-
-  --animate-marquee: marquee var(--duration) linear infinite;
-  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
-  --animate-float: float 6s ease-in-out infinite;
+  --animate-marquee: marquee 38s linear infinite;
 
   @keyframes marquee {
-    from {
-      transform: translateX(0);
-    }
-
     to {
-      transform: translateX(calc(-100% - var(--gap)));
-    }
-  }
-
-  @keyframes marquee-vertical {
-    from {
-      transform: translateY(0);
-    }
-
-    to {
-      transform: translateY(calc(-100% - var(--gap)));
-    }
-  }
-
-  @keyframes float {
-
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-
-    50% {
-      transform: translateY(-20px);
+      transform: translateX(-50%);
     }
   }
 }
 
 @layer base {
+  html {
+    background: var(--pink);
+    color: var(--cocoa);
+  }
   body {
-    @apply text-foreground font-base bg-background selection:bg-main selection:text-main-foreground;
-    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+    font-family: var(--font-sans);
+    font-variation-settings: "wdth" 100;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
   }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-heading uppercase;
+  ::selection {
+    background: var(--cocoa);
+    color: var(--butter);
   }
-
-  h1 {
-    @apply text-5xl md:text-7xl lg:text-8xl leading-[0.9];
+  :focus-visible {
+    outline: 3px solid var(--cocoa);
+    outline-offset: 3px;
+    border-radius: 6px;
   }
-
-  h2 {
-    @apply text-4xl md:text-6xl leading-[0.95];
+  button {
+    cursor: pointer;
   }
-
-  h3 {
-    @apply text-3xl md:text-4xl;
-  }
-
-  p {
-    @apply leading-relaxed text-lg md:text-xl;
-  }
-
-  /* Bind utility tokens to Next Font variables */
-  body {
-    font-family: var(--font-base);
-    font-weight: 500;
-    /* Slightly bolder base */
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  .font-heading {
-    font-family: var(--font-heading);
-    font-weight: 400;
+  button:disabled {
+    cursor: not-allowed;
   }
 }
 
-@layer utilities {
-  .text-stroke {
-    -webkit-text-stroke: 2px var(--border);
-    color: transparent;
+@layer components {
+  /* Condensed heavy grotesque for names and section titles. */
+  .type-name {
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-variation-settings: "wdth" 75;
+    letter-spacing: -0.02em;
+    line-height: 0.88;
   }
 
-  .text-stroke-sm {
-    -webkit-text-stroke: 1px var(--border);
-    color: transparent;
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
 
-  .glass-panel {
-    @apply bg-background/80 backdrop-blur-md border-2 border-border;
+  /* Paper grain on anything that should feel printed. */
+  .grain {
+    position: relative;
+    isolation: isolate;
+  }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.35  0 0 0 0 0.22  0 0 0 0 0.15  0 0 0 0.35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    border-radius: inherit;
+    z-index: 1;
+  }
+
+  /* Kraft board: base color + fibers. */
+  .kraft {
+    background-color: var(--kraft);
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='k'><feTurbulence type='fractalNoise' baseFrequency='0.02 0.6' numOctaves='3' seed='4'/><feColorMatrix values='0 0 0 0 0.35  0 0 0 0 0.2  0 0 0 0 0.08  0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23k)'/></svg>"),
+      linear-gradient(160deg, #d49e66, #c08853);
+  }
+
+  /* Ticket paper with a torn bottom edge. */
+  .ticket {
+    background: var(--paper);
+    --tooth: 9px;
+    mask:
+      conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(var(--tooth) * 2) 100%;
+    padding-bottom: calc(var(--tooth) + 12px);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    border-radius: 999px;
+    font-weight: 700;
+    transition:
+      transform 0.25s var(--ease-squish),
+      background-color 0.2s,
+      color 0.2s,
+      box-shadow 0.25s;
+  }
+  .btn:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+  .btn-cocoa {
+    background: var(--cocoa);
+    color: var(--butter);
+    box-shadow: 0 4px 0 #1d0e09;
+  }
+  .btn-cocoa:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #1d0e09;
+  }
+  .btn-cocoa:disabled {
+    opacity: 0.35;
+  }
+  .btn-ghost {
+    border: 2px solid var(--cocoa);
+    color: var(--cocoa);
+  }
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--cocoa);
+    color: var(--pink);
+  }
+  .btn-ghost:disabled {
+    opacity: 0.3;
+  }
+
+  .toast-ticket {
+    background: var(--paper);
+    color: var(--cocoa);
+    font-family: var(--font-mono);
+    padding: 14px 16px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: min(360px, calc(100vw - 32px));
+    box-shadow: 0 18px 40px -12px rgb(58 31 22 / 0.45);
+  }
+  .toast-title {
+    font-weight: 500;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .toast-desc {
+    font-size: 12px;
+    opacity: 0.75;
+  }
+  .toast-action {
+    margin-left: auto;
+    background: var(--cocoa);
+    color: var(--butter);
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }

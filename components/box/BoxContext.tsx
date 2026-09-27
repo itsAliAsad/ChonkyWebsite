@@ -2,112 +2,165 @@
 
 import * as React from "react"
 import { toast } from "sonner"
+import { allFlavors, COOKIE_GRAMS, DELIVERY_FEE, flavorById } from "@/lib/flavors"
 
-export type Slot = {
-	flavor?: string
-	quantity: number
+export const BOX_SIZES = [2, 4, 6] as const
+export type BoxSize = (typeof BOX_SIZES)[number]
+
+type BoxState = {
+  size: BoxSize
+  wells: (string | null)[]
+  closed: boolean
+  note: string
 }
 
-type BoxContextValue = {
-	slots: Slot[]
-	addSlot: () => void
-	reset: () => void
-	setSlotFlavor: (index: number, flavor: string) => void
-	setSlotQuantity: (index: number, qty: number) => void
-	addFlavorToBox: (flavor: string, qty?: number) => void
+type Flight = { key: number; flavorId: string; from: DOMRect; well: number }
+
+type BoxContextValue = BoxState & {
+  count: number
+  subtotal: number
+  total: number
+  grams: number
+  /** Wells whose cookie is still flying toward them. */
+  pending: Set<number>
+  /** Bumps every time a cookie lands, so the box and scale can react. */
+  landedAt: { well: number; t: number } | null
+  flights: Flight[]
+  add: (flavorId: string, from?: DOMRect) => void
+  remove: (well: number) => void
+  setSize: (size: BoxSize) => void
+  surprise: () => void
+  clear: () => void
+  setClosed: (closed: boolean) => void
+  setNote: (note: string) => void
+  land: (flight: Flight) => void
 }
 
 const BoxContext = React.createContext<BoxContextValue | undefined>(undefined)
 
+const resize = (wells: (string | null)[], size: number) => {
+  const packed = wells.filter(Boolean) as string[]
+  return Array.from({ length: size }, (_, i) => packed[i] ?? null)
+}
+
 export function BoxProvider({ children }: { children: React.ReactNode }) {
-	const [slots, setSlots] = React.useState<Slot[]>([{ quantity: 0 }])
-	const toastIdRef = React.useRef<string | number | null>(null)
+  const [state, setState] = React.useState<BoxState>({ size: 6, wells: Array(6).fill(null), closed: false, note: "" })
+  const [pending, setPending] = React.useState<Set<number>>(() => new Set())
+  const [flights, setFlights] = React.useState<Flight[]>([])
+  const [landedAt, setLandedAt] = React.useState<BoxContextValue["landedAt"]>(null)
+  const stateRef = React.useRef(state)
+  stateRef.current = state
+  const flightKey = React.useRef(0)
 
-	const addSlot = React.useCallback(() => {
-		setSlots((prev) => [...prev, { quantity: 0 }])
-	}, [])
+  const commit = React.useCallback((next: BoxState) => {
+    stateRef.current = next
+    setState(next)
+  }, [])
 
-	const reset = React.useCallback(() => {
-		setSlots([{ quantity: 0 }])
-	}, [])
+  const launch = React.useCallback((flavorId: string, well: number, from?: DOMRect) => {
+    if (!from) return
+    const key = ++flightKey.current
+    setPending((p) => new Set(p).add(well))
+    setFlights((f) => [...f, { key, flavorId, from, well }])
+  }, [])
 
-	const setSlotFlavor = React.useCallback((index: number, flavor: string) => {
-		setSlots((prev) => {
-			const next = [...prev]
-			const currentQty = next[index]?.quantity ?? 0
-			next[index] = { ...next[index], flavor, quantity: currentQty === 0 ? 1 : currentQty }
-			return next
-		})
-	}, [])
+  const add = React.useCallback(
+    (flavorId: string, from?: DOMRect) => {
+      let s = stateRef.current
+      if (s.closed) s = { ...s, closed: false }
+      let well = s.wells.indexOf(null)
+      if (well === -1) {
+        const bigger = BOX_SIZES.find((n) => n > s.size)
+        if (!bigger) {
+          toast("Your box of 6 is full", { description: "Tap a cookie in the box to swap it out." })
+          return
+        }
+        s = { ...s, size: bigger, wells: resize(s.wells, bigger) }
+        well = s.wells.indexOf(null)
+        toast(`Upgraded to a box of ${bigger}`, { description: "More room for more chonk." })
+      }
+      const wells = [...s.wells]
+      wells[well] = flavorId
+      commit({ ...s, wells })
+      launch(flavorId, well, from)
+    },
+    [commit, launch],
+  )
 
-	const setSlotQuantity = React.useCallback((index: number, qty: number) => {
-		setSlots((prev) => {
-			const next = [...prev]
-			next[index] = { ...next[index], quantity: Math.max(0, Math.floor(qty)) }
-			return next
-		})
-	}, [])
+  const land = React.useCallback((flight: Flight) => {
+    setFlights((f) => f.filter((x) => x.key !== flight.key))
+    setPending((p) => {
+      const n = new Set(p)
+      n.delete(flight.well)
+      return n
+    })
+    setLandedAt({ well: flight.well, t: performance.now() })
+  }, [])
 
-	const addFlavorToBox = React.useCallback((flavor: string, qty: number = 1) => {
-		setSlots((prev) => {
-			// If flavor exists, increment its quantity, else append a new filled slot
-			const next = [...prev]
-			const existingIndex = next.findIndex((s) => s.flavor === flavor)
-			if (existingIndex !== -1) {
-				next[existingIndex] = { ...next[existingIndex], quantity: (next[existingIndex].quantity || 0) + qty }
-				return next
-			}
-			// Find the first empty slot to reuse
-			const emptyIndex = next.findIndex((s) => !s.flavor)
-			if (emptyIndex !== -1) {
-				next[emptyIndex] = { flavor, quantity: Math.max(1, qty) }
-			} else {
-				next.push({ flavor, quantity: Math.max(1, qty) })
-			}
-			return next
-		})
-		// Show a single persistent toast; if one already exists, do not spawn another
-		if (toastIdRef.current == null) {
-			toastIdRef.current = toast("Added to box", {
-				description: `${qty} × ${flavor} added.`,
-				action: {
-					label: "Finalize your box",
-					onClick: () => {
-						const el = document.getElementById("customize")
-						if (el) el.scrollIntoView({ behavior: "smooth", block: "start" })
-					},
-				},
-				duration: Infinity,
-				// Clear ref when toast is dismissed
-				onDismiss: () => {
-					toastIdRef.current = null
-				},
-			})
-		} else {
-			// Update existing toast description to reflect latest addition
-			toast.message("Added to box", {
-				description: `${qty} × ${flavor} added.`,
-				id: toastIdRef.current as any,
-			})
-		}
-	}, [])
+  const remove = React.useCallback(
+    (well: number) => {
+      const s = stateRef.current
+      commit({ ...s, wells: s.wells.map((w, i) => (i === well ? null : w)), closed: false })
+    },
+    [commit],
+  )
 
-	const value: BoxContextValue = {
-		slots,
-		addSlot,
-		reset,
-		setSlotFlavor,
-		setSlotQuantity,
-		addFlavorToBox,
-	}
+  const setSize = React.useCallback(
+    (size: BoxSize) => {
+      const s = stateRef.current
+      if (s.wells.filter(Boolean).length > size) return
+      commit({ ...s, size, wells: resize(s.wells, size), closed: false })
+    },
+    [commit],
+  )
 
-	return <BoxContext.Provider value={value}>{children}</BoxContext.Provider>
+  const surprise = React.useCallback(() => {
+    const s = stateRef.current
+    const empty = s.wells.map((w, i) => (w ? -1 : i)).filter((i) => i >= 0)
+    if (!empty.length) return
+    const wells = [...s.wells]
+    const tray = document.querySelectorAll<HTMLElement>("[data-tray-flavor]")
+    empty.forEach((well, n) => {
+      const flavor = allFlavors[Math.floor(Math.random() * allFlavors.length)]
+      wells[well] = flavor.id
+      const src = Array.from(tray).find((el) => el.dataset.trayFlavor === flavor.id)
+      window.setTimeout(() => launch(flavor.id, well, src?.getBoundingClientRect()), n * 120)
+      if (src) setPending((p) => new Set(p).add(well))
+    })
+    commit({ ...s, wells, closed: false })
+  }, [commit, launch])
+
+  const clear = React.useCallback(() => commit({ ...stateRef.current, wells: Array(stateRef.current.size).fill(null), closed: false }), [commit])
+  const setClosed = React.useCallback((closed: boolean) => commit({ ...stateRef.current, closed }), [commit])
+  const setNote = React.useCallback((note: string) => commit({ ...stateRef.current, note }), [commit])
+
+  const filled = state.wells.filter(Boolean) as string[]
+  const subtotal = filled.reduce((sum, id) => sum + (flavorById.get(id)?.price ?? 0), 0)
+
+  const value: BoxContextValue = {
+    ...state,
+    count: filled.length,
+    subtotal,
+    total: subtotal > 0 ? subtotal + DELIVERY_FEE : 0,
+    grams: filled.length * COOKIE_GRAMS,
+    pending,
+    landedAt,
+    flights,
+    add,
+    remove,
+    setSize,
+    surprise,
+    clear,
+    setClosed,
+    setNote,
+    land,
+  }
+
+  return <BoxContext.Provider value={value}>{children}</BoxContext.Provider>
 }
 
-export function useBoxBuilder() {
-	const ctx = React.useContext(BoxContext)
-	if (!ctx) throw new Error("useBoxBuilder must be used within a BoxProvider")
-	return ctx
+export function useBox() {
+  const ctx = React.useContext(BoxContext)
+  if (!ctx) throw new Error("useBox must be used within a BoxProvider")
+  return ctx
 }
-
-
